@@ -197,10 +197,19 @@ public class SolentraConstants {
     }
     
     /**
-     * Check if framework is valid
+     * Check if framework is valid (case-insensitive)
      */
     public static Boolean isValidFramework(String framework) {
-        return String.isNotBlank(framework) && ALL_FRAMEWORKS.contains(framework.toUpperCase());
+        if (String.isBlank(framework)) {
+            return false;
+        }
+        String upperFramework = framework.toUpperCase();
+        for (String validFramework : ALL_FRAMEWORKS) {
+            if (validFramework.toUpperCase().equals(upperFramework)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
 
