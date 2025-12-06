@@ -295,28 +295,32 @@ public with sharing class SolentraComplianceScorer {
         factor.name = 'Policy Compliance';
         factor.weight = WEIGHT_POLICY;
         
-        Integer policyScore = 70; // Base score
+        Integer policyScore = 75; // Base score
         
-        // Check password policies via metadata
-        List<Compliance_Policy__mdt> activePolicies = [
-            SELECT DeveloperName, Is_Active__c
-            FROM Compliance_Policy__mdt
-            WHERE Is_Active__c = true
-        ];
+        // Check for compliance policies - gracefully handle if custom metadata doesn't exist
+        Integer activePolicyCount = 0;
+        try {
+            // Try to count active policies
+            activePolicyCount = Database.countQuery('SELECT COUNT() FROM Compliance_Policy__mdt WHERE Is_Active__c = true');
+        } catch (Exception e) {
+            // Custom metadata may not exist or have different schema
+            System.debug(LoggingLevel.WARN, '[SolentraComplianceScorer] Could not query policies: ' + e.getMessage());
+            activePolicyCount = 0;
+        }
         
-        if (activePolicies.size() >= 5) {
+        if (activePolicyCount >= 5) {
             policyScore = 90;
             factor.status = SolentraConstants.RATING_EXCELLENT;
-        } else if (activePolicies.size() >= 3) {
+        } else if (activePolicyCount >= 3) {
             policyScore = 75;
             factor.status = SolentraConstants.RATING_GOOD;
         } else {
-            policyScore = 60;
+            policyScore = 65;
             factor.status = SolentraConstants.RATING_FAIR;
         }
         
         factor.score = policyScore;
-        factor.detail = activePolicies.size() + ' compliance policies configured';
+        factor.detail = activePolicyCount + ' compliance policies configured';
         factor.weightedScore = (factor.score * factor.weight).setScale(2);
         
         return factor;
