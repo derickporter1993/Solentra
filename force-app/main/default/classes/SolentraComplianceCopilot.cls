@@ -55,9 +55,10 @@ public with sharing class SolentraComplianceCopilot {
         CopilotResponse response = new CopilotResponse();
         
         try {
-            // Validate input
+            // Validate input - handle null/blank queries gracefully
             if (String.isBlank(query)) {
                 response.answer = Label.Copilot_General_Help;
+                response.queryType = SolentraConstants.QUERY_GENERAL;
                 return response;
             }
             

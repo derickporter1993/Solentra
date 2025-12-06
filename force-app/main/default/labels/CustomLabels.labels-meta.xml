@@ -222,4 +222,39 @@
         <shortDescription>Scorecard Error</shortDescription>
         <value>Error generating weekly scorecard: {0}</value>
     </labels>
+    <labels>
+        <fullName>Scorecard_Weekly_Title</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Weekly Scorecard Title</shortDescription>
+        <value>Weekly Compliance Scorecard</value>
+    </labels>
+    <labels>
+        <fullName>Scorecard_Score_Breakdown</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Score Breakdown Title</shortDescription>
+        <value>Score Breakdown</value>
+    </labels>
+    <labels>
+        <fullName>Scorecard_Top_Risks</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Top Risks Title</shortDescription>
+        <value>Top {0} Risks Requiring Attention</value>
+    </labels>
+    <labels>
+        <fullName>Scorecard_View_Report</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>View Report Button</shortDescription>
+        <value>View Full Report</value>
+    </labels>
+    <labels>
+        <fullName>Scorecard_Scheduled</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Scheduled Confirmation</shortDescription>
+        <value>Weekly scorecard scheduled for {0}. Job name: {1}</value>
+    </labels>
 </CustomLabels>

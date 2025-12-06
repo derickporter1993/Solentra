@@ -8,15 +8,15 @@
  * - Schedule via Setup → Apex → Schedule Apex
  * - Or call WeeklyScorecardScheduler.scheduleWeekly() to schedule programmatically
  * 
- * @author Sentinel Enterprise
- * @version 1.1
+ * @author Solentra
+ * @version 1.2
  */
 public with sharing class WeeklyScorecardScheduler implements Schedulable {
     
-    // Channel constants (using SentinelConstants for consistency)
-    public static final String SLACK = SentinelConstants.CHANNEL_SLACK;
-    public static final String TEAMS = SentinelConstants.CHANNEL_TEAMS;
-    public static final String BOTH = SentinelConstants.CHANNEL_BOTH;
+    // Channel constants (using SolentraConstants for consistency)
+    public static final String SLACK = SolentraConstants.CHANNEL_SLACK;
+    public static final String TEAMS = SolentraConstants.CHANNEL_TEAMS;
+    public static final String BOTH = SolentraConstants.CHANNEL_BOTH;
     
     // Logging prefix for easy log filtering
     private static final String LOG_PREFIX = '[WeeklyScorecardScheduler] ';
@@ -38,7 +38,7 @@ public with sharing class WeeklyScorecardScheduler implements Schedulable {
         try {
             // Calculate current compliance score
             Long startTime = System.currentTimeMillis();
-            SentinelComplianceScorer.ScoreResult scoreResult = SentinelComplianceScorer.calculateReadinessScore();
+            SolentraComplianceScorer.ScoreResult scoreResult = SolentraComplianceScorer.calculateReadinessScore();
             Long duration = System.currentTimeMillis() - startTime;
             
             System.debug(LoggingLevel.INFO, LOG_PREFIX + 'Score calculation completed in ' + duration + 'ms. Score: ' + scoreResult.overallScore);
@@ -65,7 +65,8 @@ public with sharing class WeeklyScorecardScheduler implements Schedulable {
             System.debug(LoggingLevel.INFO, LOG_PREFIX + 'Weekly scorecard sent successfully');
             
         } catch (Exception e) {
-            String errorMsg = e.getMessage();
+            // Safely handle null error messages (consistent with SolentraComplianceCopilot)
+            String errorMsg = String.isNotBlank(e.getMessage()) ? e.getMessage() : 'Unknown error';
             System.debug(LoggingLevel.ERROR, LOG_PREFIX + 'Error: ' + errorMsg + '\n' + e.getStackTraceString());
             
             // Send error notification using custom label
@@ -88,7 +89,7 @@ public with sharing class WeeklyScorecardScheduler implements Schedulable {
     /**
      * Send scorecard to Slack
      */
-    private static void sendSlackScorecard(SentinelComplianceScorer.ScoreResult scoreResult) {
+    private static void sendSlackScorecard(SolentraComplianceScorer.ScoreResult scoreResult) {
         String emoji = getScoreEmoji(scoreResult.overallScore);
         String color = getScoreColor(scoreResult.overallScore);
         
@@ -153,7 +154,7 @@ public with sharing class WeeklyScorecardScheduler implements Schedulable {
             });
             List<Map<String, Object>> factorFields = new List<Map<String, Object>>();
             
-            for (SentinelComplianceScorer.ScoreFactor factor : scoreResult.factors) {
+            for (SolentraComplianceScorer.ScoreFactor factor : scoreResult.factors) {
                 Map<String, Object> field = new Map<String, Object>();
                 field.put('type', 'mrkdwn');
                 field.put('text', '*' + factor.name + '*\n' + factor.score.setScale(0) + '/100 (' + factor.status + ')');
@@ -176,7 +177,7 @@ public with sharing class WeeklyScorecardScheduler implements Schedulable {
             });
             blocks.add(risksSection);
             
-            for (SentinelComplianceScorer.Risk risk : scoreResult.topRisks) {
+            for (SolentraComplianceScorer.Risk risk : scoreResult.topRisks) {
                 Map<String, Object> riskSection = new Map<String, Object>();
                 riskSection.put('type', 'section');
                 Map<String, Object> riskText = new Map<String, Object>();
@@ -214,7 +215,7 @@ public with sharing class WeeklyScorecardScheduler implements Schedulable {
         List<Map<String, Object>> attachments = new List<Map<String, Object>>();
         Map<String, Object> attachment = new Map<String, Object>();
         attachment.put('color', color);
-        attachment.put('footer', 'Sentinel ' + Label.Scorecard_Weekly_Title + ' | ' + Datetime.now().format('yyyy-MM-dd'));
+        attachment.put('footer', 'Solentra ' + Label.Scorecard_Weekly_Title + ' | ' + Datetime.now().format('yyyy-MM-dd'));
         attachments.add(attachment);
         payload.put('attachments', attachments);
         
@@ -224,23 +225,23 @@ public with sharing class WeeklyScorecardScheduler implements Schedulable {
     /**
      * Send scorecard to Teams
      */
-    private static void sendTeamsScorecard(SentinelComplianceScorer.ScoreResult scoreResult) {
+    private static void sendTeamsScorecard(SolentraComplianceScorer.ScoreResult scoreResult) {
         // Use existing TeamsNotifier method
         TeamsNotifier.sendWeeklyScorecard();
     }
     
     /**
-     * Get emoji based on score (using SentinelConstants)
+     * Get emoji based on score (using SolentraConstants)
      */
     private static String getScoreEmoji(Decimal score) {
-        return SentinelConstants.getScoreEmoji(score);
+        return SolentraConstants.getScoreEmoji(score);
     }
     
     /**
-     * Get color hex code based on score (using SentinelConstants)
+     * Get color hex code based on score (using SolentraConstants)
      */
     private static String getScoreColor(Decimal score) {
-        return SentinelConstants.getScoreColor(score);
+        return SolentraConstants.getScoreColor(score);
     }
     
     /**
@@ -263,7 +264,7 @@ public with sharing class WeeklyScorecardScheduler implements Schedulable {
             9, 0, 0
         );
         
-        String jobName = 'Sentinel Weekly Scorecard - ' + channel + ' - ' + Datetime.now().format('yyyy-MM-dd');
+        String jobName = 'Solentra Weekly Scorecard - ' + channel + ' - ' + Datetime.now().format('yyyy-MM-dd');
         String cronExpression = getCronExpression(nextRun);
         
         WeeklyScorecardScheduler scheduler = new WeeklyScorecardScheduler();
