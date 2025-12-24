@@ -1,13 +1,15 @@
-# Solentra
+# Prometheion
 
 **Court-defensible compliance & AI governance platform for Salesforce**
+
+*A product by SolentraCRM*
 
 [![Salesforce](https://img.shields.io/badge/Salesforce-00A1E0?style=flat&logo=salesforce&logoColor=white)](https://salesforce.com)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## Overview
 
-Solentra is an enterprise-grade compliance and AI governance platform built natively on Salesforce. It provides automated compliance monitoring, audit evidence generation, and real-time alerting across multiple regulatory frameworks.
+Prometheion is an enterprise-grade compliance and AI governance platform built natively on Salesforce. It provides automated compliance monitoring, audit evidence generation, and real-time alerting across multiple regulatory frameworks.
 
 ## Key Features
 
@@ -85,17 +87,17 @@ Multi-channel alerting:
 
 3. **Authorize your org**
    ```bash
-   sf org login web -a solentra-org
+   sf org login web -a prometheion-org
    ```
 
 4. **Deploy to your org**
    ```bash
-   sf project deploy start --target-org solentra-org
+   sf project deploy start --target-org prometheion-org
    ```
 
 5. **Assign permission set**
    ```bash
-   sf org assign permset --name Solentra_Admin --target-org solentra-org
+   sf org assign permset --name Prometheion_Admin --target-org prometheion-org
    ```
 
 ### Setting Up Notifications
@@ -114,13 +116,13 @@ Multi-channel alerting:
 ```apex
 // Schedule for every Monday at 9 AM
 String cronExp = '0 0 9 ? * MON';
-System.schedule('Solentra Weekly Scorecard', cronExp, new WeeklyScorecardScheduler());
+System.schedule('Prometheion Weekly Scorecard', cronExp, new WeeklyScorecardScheduler());
 ```
 
 ## Project Structure
 
 ```
-Solentra/
+Prometheion/
 ├── force-app/main/default/
 │   ├── classes/           # Apex classes
 │   ├── lwc/               # Lightning Web Components
@@ -139,18 +141,18 @@ Solentra/
 ## Components
 
 ### Apex Classes
-- `SentinelComplianceCopilot` - Natural language compliance query interface
-- `SentinelComplianceScorer` - Multi-framework compliance scoring
-- `SentinelReasoningEngine` - AI-powered compliance analysis
-- `SentinelRemediationEngine` - Automated remediation suggestions
-- `SentinelGraphIndexer` - Compliance relationship mapping
+- `PrometheionComplianceCopilot` - Natural language compliance query interface
+- `PrometheionComplianceScorer` - Multi-framework compliance scoring
+- `PrometheionReasoningEngine` - AI-powered compliance analysis
+- `PrometheionRemediationEngine` - Automated remediation suggestions
+- `PrometheionGraphIndexer` - Compliance relationship mapping
 - `WeeklyScorecardScheduler` - Scheduled compliance reports
 - `SlackNotifier` / `TeamsNotifier` - Multi-channel notifications
-- `SentinelConstants` - Centralized constants and utilities
+- `PrometheionConstants` - Centralized constants and utilities
 
 ### Lightning Web Components
-- `complianceCopilot` - AI-powered compliance chat interface
-- `sentinelReadinessScore` - Visual compliance dashboard
+- `prometheionCopilot` - AI-powered compliance chat interface
+- `prometheionReadinessScore` - Visual compliance dashboard
 - `apiUsageDashboard` - API usage monitoring
 - `flowExecutionMonitor` - Flow performance tracking
 - `systemMonitorDashboard` - System health overview
@@ -217,8 +219,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Support
 
-For questions or issues, please open a GitHub issue or contact the Solentra team.
+For questions or issues, please open a GitHub issue or contact the SolentraCRM team.
 
 ---
 
-**Built with ❤️ for Salesforce compliance professionals**
+**Prometheion** - Built with ❤️ by SolentraCRM for Salesforce compliance professionals
